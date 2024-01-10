@@ -51,6 +51,7 @@ let createTasks = () => {
             <span class="options">
               <i onClick= "editTask(this)" data-bs-toggle="modal" data-bs-target="#form" class="fas fa-edit"></i>
               <i onClick ="deleteTask(this);createTasks()" class="fas fa-trash-alt"></i>
+              <i onClick ="duplicateTask(this);" class="fas fa-copy"></i>
             </span>
           </div>
       `);
@@ -78,9 +79,28 @@ let editTask = (e) => {
 
     deleteTask(e);
 }
+let duplicateTask = (e) => {
+    // Clone the task element
+    const clonedTaskElement = e.parentElement.parentElement.cloneNode(true);
+
+    // Append the cloned task element to the parent element
+    e.parentElement.parentElement.parentNode.appendChild(clonedTaskElement);
+    console.log(clonedTaskElement);
+
+    // Clone the task data
+    const clonedTaskData = JSON.parse(JSON.stringify(data[e.parentElement.parentElement.id]));
+
+    // Update the data array with the cloned task data
+    data.push(clonedTaskData);
+
+    // Update the local storage with the new data
+    localStorage.setItem("data", JSON.stringify(data));
+
+    console.log(data);
+}
 //data will remain even if you refresh  
+
 (() => {
     data = JSON.parse(localStorage.getItem("data")) || [];
-    console.log(data);
     createTasks();
   })();
