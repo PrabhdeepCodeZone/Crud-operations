@@ -65,6 +65,9 @@ let resetForm = () => {
     dateInput.value = "";
     textarea.value = "";
   };
+
+
+
 let deleteTask = (e) => {
     e.parentElement.parentElement.remove();
     data.splice(e.parentElement.parentElement.id,1);
@@ -79,25 +82,54 @@ let editTask = (e) => {
 
     deleteTask(e);
 }
+let generateUniqueId = () => {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+};
+
 let duplicateTask = (e) => {
     // Clone the task element
     const clonedTaskElement = e.parentElement.parentElement.cloneNode(true);
 
     // Append the cloned task element to the parent element
     e.parentElement.parentElement.parentNode.appendChild(clonedTaskElement);
-    console.log(clonedTaskElement);
 
-    // Clone the task data
+    // Clone the task data with deep cloning
     const clonedTaskData = JSON.parse(JSON.stringify(data[e.parentElement.parentElement.id]));
 
-    // Update the data array with the cloned task data
+    // Generate a new unique ID for the duplicated task
+    const newId = generateUniqueId();
+
+    // Update the ID in the cloned task data
+    clonedTaskData.id = newId;
+
+    // Add the duplicated task data to the data array
     data.push(clonedTaskData);
 
     // Update the local storage with the new data
     localStorage.setItem("data", JSON.stringify(data));
 
     console.log(data);
-}
+};
+
+// let duplicateTask = (e) => {
+//     // Clone the task element
+//     const clonedTaskElement = e.parentElement.parentElement.cloneNode(true);
+
+//     // Append the cloned task element to the parent element
+//     e.parentElement.parentElement.parentNode.appendChild(clonedTaskElement);
+//     console.log(clonedTaskElement);
+
+//     // Clone the task data
+//     const clonedTaskData = JSON.parse(JSON.stringify(data[e.parentElement.parentElement.id]));
+
+//     // Update the data array with the cloned task data
+//     data.push(clonedTaskData);
+
+//     // Update the local storage with the new data
+//     localStorage.setItem("data", JSON.stringify(data));
+
+//     console.log(data);
+// }
 //data will remain even if you refresh  
 
 (() => {
